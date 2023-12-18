@@ -5,7 +5,7 @@
 -- hbnb_dev should have all privileges on the database hbnb_dev_db (and only this database)
 -- hbnb_dev should have SELECT privilege on the database performance_schema (and only this database)
 CREATE DATABASE IF NOT EXISTS `hbnb_dev_db`;
-CREATE USER IF NOT EXISTS `hbnb_dev`@`localhost` IDENTIFIED WITH mysql_native_password BY 'hbnb_dev_pwd';
+CREATE USER IF NOT EXISTS `hbnb_dev`@`localhost` IDENTIFIED WITH authentication_plugin BY 'hbnb_dev_pwd';
 GRANT ALL PRIVILEGES  ON `hbnb_dev_db`.*  TO `hbnb_dev`@`localhost`;
 GRANT SELECT ON  `performance_schema`.* TO `htbnb_dev`@`localhost`;
 FLUSH PRIVILEGES;
