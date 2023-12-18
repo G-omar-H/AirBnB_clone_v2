@@ -133,13 +133,17 @@ class HBNBCommand(cmd.Cmd):
                     value = HBNBCommand.types[key](value)
                 if type(value) is str and ("_" in value or "\"" in value):
                     while "_" in value:
-                        value = value.partition("_")[0] + " "
-                        + value.partition("_")[2]
+                        value = value.partition("_")[0] + " "\
+                         + value.partition("_")[2]
                     if value[0] in ['"', "'"] and value[0][-1] in ['"', "'"]:
                         value = value[1:-1]
                     if '"' in value:
-                        value = value.partition("\"")[0] +\
-                            '\\' + '\"' + value.partition("\"")[2]
+                        i = 0
+                        while value[i] is not None:
+                            if value[i] == '"':
+                                value = value.partition("\"")[0] +\
+                                    '\\' + '\"' + value.partition("\"")[2]
+                            i += 1
                 setattr(new_instance, key, value)
         storage.save()
         print(new_instance.id)
