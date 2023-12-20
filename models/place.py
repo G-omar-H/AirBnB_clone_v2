@@ -2,7 +2,7 @@
 """ Place Module for HBNB project """
 from tempfile import gettempprefix
 from models.base_model import BaseModel, Base
-from sqlalchemy import Integer, Float, String, Column, ForeignKey
+from sqlalchemy import Integer, Float, String, ForeignKey, Column, Table
 from sqlalchemy.orm import relationship
 
 
@@ -38,6 +38,51 @@ class Place(BaseModel, Base):
         """
         from models import storage
 
+        reviews_list = []
         for k, v in storage.all():
             if k.partition(".")[0] == "Review":
-                return [i for i in v if v.place_id == self.id]
+                if v.place_id == self.id:
+                    reviews_list.append(v)
+        return reviews_list
+
+    place_amenity = Table(
+        "place_amenity",
+        Base.metadata,
+        Column("place_id", String(60),
+               ForeignKey("places.id"),
+               primary_key=True),
+        Column("amenity_id", String(60),
+               ForeignKey("amenities.id"),
+               primary_key=True),
+    )
+
+    amenities = relationship(
+        "Amenity", backref="place_amenities",
+        secondary="place_amenity", viewonly=False
+    )
+
+    @property
+    def get_amenities(self):
+        """
+        Getter attribute amenities that returns the list of Amenity instances
+        based on the attribute amenity_ids
+        that contains all Amenity.id linked to the Place
+        """
+        from models import storage
+
+        amenins = []
+        for k, v in storage.all():
+            if k.partition(".")[0] == "Amenity":
+                if v.id in self.amenity_ids:
+                    amenins.append(v)
+        return amenins
+
+    def set_amenity_ids(self, obj):
+        """
+        Setter attribute amenities that handles append method
+        for adding an Amenity.id to the attribute amenity_ids.
+        This method should accept only Amenity object, otherwise,
+        do nothing.
+        """
+        if obj.__class__.__name__ == "Amenity":
+            self.amenity_ids.append(obj.id)
