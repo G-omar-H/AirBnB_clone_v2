@@ -50,4 +50,3 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
-
