@@ -26,8 +26,12 @@ def do_pack():
     except Exception:
         return None
 
+
 @task
 def do_deploy(archive_path):
+    """
+    distributes an archive to your web servers
+    """
     if not os.path.exists(archive_path):
         return False
 
@@ -43,9 +47,15 @@ def do_deploy(archive_path):
 
         run('rm -rf /data/web_static/current')
 
+        run('mv /data/web_static/releases/{}/web_static/* \
+            /data/web_static/releases/{}/'
+            .format(foldername, foldername))
+
         run('ln -s /data/web_static/releases/{}/ /data/web_static/current'
             .format(foldername))
 
+        print("New version deployed!")
+        
         return True
     except Exception:
         return False
