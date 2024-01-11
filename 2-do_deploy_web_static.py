@@ -2,7 +2,6 @@
 """
 Fabric script that distributes an archive to your web servers
 """
-from sys import exception
 from fabric.api import env, put, run
 import os
 
