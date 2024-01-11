@@ -55,7 +55,7 @@ def do_deploy(archive_path):
             .format(foldername))
 
         print("New version deployed!")
-        
+
         return True
     except Exception:
         return False
