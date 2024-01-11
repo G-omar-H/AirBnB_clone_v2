@@ -8,6 +8,9 @@ from datetime import datetime
 
 
 def do_pack():
+    """
+    pack .tgz archive from web_static folder
+    """
     try:
         current_time = datetime.now().strftime("%Y%m%d%H%M%S")
         archive_path = "versions/web_static_{}.tgz".format(current_time)
