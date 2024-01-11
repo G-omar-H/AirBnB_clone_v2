@@ -3,7 +3,7 @@
 Fabric script that creates and distributes an archive to your web servers,
 """
 
-from fabric.api import env, put, run, local
+from fabric.api import env,  task, put, run, local
 from datetime import datetime
 import os
 
@@ -12,6 +12,21 @@ env.user = 'ubuntu'
 env.key_filename = '~/.ssh/id_rsa'
 
 
+@task
+def do_pack():
+    """
+    pack .tgz archive from web_static folder
+    """
+    try:
+        current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+        archive_path = "versions/web_static_{}.tgz".format(current_time)
+        local("mkdir -p versions")
+        local("tar -czvf {} web_static".format(archive_path))
+        return archive_path
+    except Exception:
+        return None
+
+@task
 def do_deploy(archive_path):
     if not os.path.exists(archive_path):
         return False
@@ -36,20 +51,7 @@ def do_deploy(archive_path):
         return False
 
 
-def do_pack():
-    """
-    pack .tgz archive from web_static folder
-    """
-    try:
-        current_time = datetime.now().strftime("%Y%m%d%H%M%S")
-        archive_path = "versions/web_static_{}.tgz".format(current_time)
-        local("mkdir -p versions")
-        local("tar -czvf {} web_static".format(archive_path))
-        return archive_path
-    except Exception:
-        return None
-
-
+@task
 def deploy():
     """
     creates and distributes an archive to your web server
