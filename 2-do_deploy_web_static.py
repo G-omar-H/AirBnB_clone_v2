@@ -13,40 +13,45 @@ env.key_filename = '~/.ssh/id_rsa'
 
 @task
 def do_pack():
-    """ method doc
-        sudo fab -f 1-pack_web_static.py do_pack
     """
-    formatted_dt = datetime.now().strftime('%Y%m%d%H%M%S')
-    mkdir = "mkdir -p versions"
-    path = "versions/web_static_{}.tgz".format(formatted_dt)
-    print("Packing web_static to {}".format(path))
-    if local("{} && tar -cvzf {} web_static".format(mkdir, path)).succeeded:
-        return path
-    return None
+    pack .tgz archive from web_static folder
+    """
+    try:
+        current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+        archive_path = "versions/web_static_{}.tgz".format(current_time)
+        local("mkdir -p versions")
+        local("tar -czvf {} web_static".format(archive_path))
+        return archive_path
+    except Exception:
+        return None
 
 
 @task
 def do_deploy(archive_path):
-    """ method doc
-        fab -f 2-do_deploy_web_static.py do_deploy:
-        archive_path=versions/web_static_20231004201306.tgz
-        -i ~/.ssh/id_rsa -u ubuntu
     """
+    distributes an archive to your web servers
+    """
+    if not os.path.exists(archive_path):
+        return False
+
     try:
-        if not os.path.exists(archive_path):
-            return False
-        fn_with_ext = os.path.basename(archive_path)
-        fn_no_ext, ext = os.path.splitext(fn_with_ext)
-        dpath = "/data/web_static/releases/"
-        put(archive_path, "/tmp/")
-        run("rm -rf {}{}/".format(dpath, fn_no_ext))
-        run("mkdir -p {}{}/".format(dpath, fn_no_ext))
-        run("tar -xzf /tmp/{} -C {}{}/".format(fn_with_ext, dpath, fn_no_ext))
-        run("rm /tmp/{}".format(fn_with_ext))
-        run("mv {0}{1}/web_static/* {0}{1}/".format(dpath, fn_no_ext))
-        run("rm -rf {}{}/web_static".format(dpath, fn_no_ext))
-        run("rm -rf /data/web_static/current")
-        run("ln -s {}{}/ /data/web_static/current".format(dpath, fn_no_ext))
+        put(archive_path, '/tmp/')
+
+        filename = os.path.basename(archive_path)
+        foldername = filename.split('.')[0]
+        run('rm -rf /data/web_static/releases/{}/'.format(foldername))
+        run('mkdir -p /data/web_static/releases/{}'.format(foldername))
+        run('tar -xzf /tmp/{} -C /data/web_static/releases/{}/'
+            .format(filename, foldername))
+  
+        run('rm /tmp/{}'.format(filename))
+        run('rm -rf /data/web_static/releases/\
+            {}/web_static/*'.format(foldername))
+        run('rm -rf /data/web_static/current')
+
+        run('ln -s /data/web_static/releases/{}/ /data/web_static/current'
+            .format(foldername))
+
         print("New version deployed!")
         return True
     except Exception:
