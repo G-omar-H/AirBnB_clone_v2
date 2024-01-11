@@ -46,10 +46,6 @@ def do_deploy(archive_path):
 
         run('rm -rf /data/web_static/current')
 
-        run('mv /data/web_static/releases/{}/web_static/* \
-            /data/web_static/releases/{}/'
-            .format(foldername, foldername))
-
         run('ln -s /data/web_static/releases/{}/ /data/web_static/current'
             .format(foldername))
 
