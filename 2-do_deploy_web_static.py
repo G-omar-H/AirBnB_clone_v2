@@ -1,19 +1,14 @@
-usr/bin/python3
+#!usr/bin/python3
 """
 Fabric script that distributes an archive to your web servers
 """
 from fabric.api import *
 import os
-
-#!/usr/bin/python3
-"""
-Fabric script that distributes an archive to your web servers
-"""
+from datetime import datetime
 
 env.hosts = ['100.25.15.47', '52.91.121.153']
 env.user = 'ubuntu'
 env.key_filename = '~/.ssh/id_rsa'
-
 
 
 def do_deploy(archive_path):
@@ -41,4 +36,3 @@ def do_deploy(archive_path):
         return True
     except Exception:
         return False
-
