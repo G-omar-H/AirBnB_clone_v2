@@ -86,3 +86,12 @@ class DBStorage:
                                        expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """
+        close a connected  session
+        Keyword arguments:
+        argument -- description
+        Return: return_description
+        """
+        self.__session.remove()
