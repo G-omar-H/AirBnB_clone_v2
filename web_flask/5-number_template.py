@@ -58,14 +58,15 @@ def is_number(n):
     return f'{n} is a number'
 
 
-@app.route('/number_template/<int:n>', strict_slashes=False)
+@app.route('/number_template/<int:n>',
+           strict_slashes=False, methods=['GET', 'Post'])
 def n_temp(n):
     """displays nth template
 
     Args:
         n (_type_): _description_
     """
-    return render_template('5-number.html')
+    return render_template('5-number.html', n=n)
 
 
 if __name__ == '__main__':
