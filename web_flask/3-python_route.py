@@ -49,7 +49,7 @@ def python_text(text='is cool'):
             res = res + c
         else:
             res = res + ' '
-    
+
     return f"Python {res}"
 
 
