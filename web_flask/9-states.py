@@ -16,12 +16,17 @@ l_flag = {" flag": False}
 
 def set_flag_true(l_flag):
     l_flag["flag"] = True
-    return
+    pass
+
+
+def set_flag_false(l_flag):
+    l_flag["flag"] = False
+    pass
 
 
 app = Flask(__name__)
 app.jinja_env.globals["set_flag_true"] = set_flag_true
-app.add_template_global(name="et_flag_true", f=set_flag_true)
+app.jinja_env.globals["set_flag_false"] = set_flag_false
 
 
 @app.teardown_appcontext
