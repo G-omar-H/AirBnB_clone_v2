@@ -12,11 +12,11 @@
                     <ul>
                         
                         {% if storagetype == db %}
-                            {% for city in state.cities %}
+                            {% for city in state.cities|sort(attribute='name') %}
                                 <li>{{city.id}}: <B>{{city.name}}</B></li>
                             {% endfor %}
                         {% else %}
-                            {% for city in state.cities %}
+                            {% for city in state.cities|sort(attribute='name') %}
                                 <li>{{city.id}}: <B>{{city.name}}</B></li>
                             {% endfor %}
                         {% endif %}
