@@ -35,6 +35,7 @@
 	width: 100%;
 	overflow: auto;
 	max-height: 300px;
+	position:relative;
 
 	margin-left: -1px;
 	margin-top: 8px;

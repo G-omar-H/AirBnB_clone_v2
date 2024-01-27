@@ -7,6 +7,7 @@ from models import State, City, Amenity, Place, storage
 from flask import Flask, render_template
 
 app = Flask(__name__)
+app.debug = True
 
 
 @app.teardown_appcontext
@@ -17,7 +18,7 @@ def teardown(Exception):
     storage.close()
 
 
-@app.route("/hbnb_filters", strict_slashes=False, methods=["GET", "POST"])
+@app.route("/hbnb", strict_slashes=False, methods=["GET", "POST"])
 def last():
     """
 
@@ -27,10 +28,10 @@ def last():
         from DBStorage and sorted by name (A->Z)
     """
     return render_template(
-        "10-hbnb_filters.html",
+        "100-hbnb.html",
         states=storage.all(State),
         amenities=storage.all(Amenity),
-        place=storage.all(Place())
+        places=storage.all(Place),
     )
 
 
